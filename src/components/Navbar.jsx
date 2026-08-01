@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Utensils, Heart, Moon, Sun } from "lucide-react";
+import { Utensils, Heart, Moon, Sun, UserCircle2 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
@@ -37,6 +37,13 @@ const Navbar = () => {
                 className={`h-4 w-4 ${isActive("/favorites") ? "fill-primary-500 text-primary-500" : ""}`}
               />
               <span>Favorites</span>
+            </Link>
+            <Link
+              to="/profile"
+              className={`flex items-center space-x-1 font-medium transition-colors hover:text-primary-500 ${isActive("/profile") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
+            >
+              <UserCircle2 className="h-4 w-4" />
+              <span>Profile</span>
             </Link>
 
             <button
