@@ -32,7 +32,6 @@ export const api = {
   // Search recipe by area (cuisine)
   searchRecipesByArea: async (area) => {
     try {
-      // TheMealDB has an inconsistency where the area list returns 'Indian' but the meals are tagged with 'India'
       const queryArea = area.toLowerCase() === 'indian' ? 'India' : area;
       const response = await apiClient.get(`/filter.php?a=${queryArea}`);
       return response.data.meals || [];
