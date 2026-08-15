@@ -1,13 +1,21 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Utensils, Heart, Moon, Sun, UserCircle2 } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Utensils, Heart, Moon, Sun, UserCircle2, LogIn, LogOut } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import { useProfile } from "../context/ProfileContext";
 
 const Navbar = () => {
   const { isDarkMode, toggleTheme } = useTheme();
+  const { isSignedIn, signOut } = useProfile();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path) => location.pathname === path;
+
+  const handleSignOut = () => {
+    signOut();
+    navigate("/login");
+  };
 
   return (
     <nav className="sticky top-0 z-50 glass border-b border-gray-200 dark:border-gray-800">
@@ -23,28 +31,50 @@ const Navbar = () => {
           </Link>
 
           <div className="flex items-center space-x-4 sm:space-x-8">
-            <Link
-              to="/"
-              className={`font-medium transition-colors hover:text-primary-500 ${isActive("/") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
-            >
-              Home
-            </Link>
-            <Link
-              to="/favorites"
-              className={`flex items-center space-x-1 font-medium transition-colors hover:text-primary-500 ${isActive("/favorites") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
-            >
-              <Heart
-                className={`h-4 w-4 ${isActive("/favorites") ? "fill-primary-500 text-primary-500" : ""}`}
-              />
-              <span>Favorites</span>
-            </Link>
-            <Link
-              to="/profile"
-              className={`flex items-center space-x-1 font-medium transition-colors hover:text-primary-500 ${isActive("/profile") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
-            >
-              <UserCircle2 className="h-4 w-4" />
-              <span>Profile</span>
-            </Link>
+            {isSignedIn && (
+              <>
+                <Link
+                  to="/"
+                  className={`font-medium transition-colors hover:text-primary-500 ${isActive("/") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/favorites"
+                  className={`flex items-center space-x-1 font-medium transition-colors hover:text-primary-500 ${isActive("/favorites") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
+                >
+                  <Heart
+                    className={`h-4 w-4 ${isActive("/favorites") ? "fill-primary-500 text-primary-500" : ""}`}
+                  />
+                  <span>Favorites</span>
+                </Link>
+                <Link
+                  to="/profile"
+                  className={`flex items-center space-x-1 font-medium transition-colors hover:text-primary-500 ${isActive("/profile") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
+                >
+                  <UserCircle2 className="h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
+              </>
+            )}
+
+            {isSignedIn ? (
+              <button
+                onClick={handleSignOut}
+                className="flex items-center space-x-1 font-medium text-gray-600 dark:text-gray-300 transition-colors hover:text-primary-500"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Sign out</span>
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className={`flex items-center space-x-1 font-medium transition-colors hover:text-primary-500 ${isActive("/login") ? "text-primary-500" : "text-gray-600 dark:text-gray-300"}`}
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Sign in</span>
+              </Link>
+            )}
 
             <button
               onClick={toggleTheme}
